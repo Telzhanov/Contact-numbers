@@ -24,7 +24,11 @@ namespace WindowsFormsAppSQL
         MySqlCommandBuilder mySqlCommandBuilder;
         DataTable dataTable;
         BindingSource bindingSource;
-        string query = "SELECT * FROM contact";
+        bool IsAsc=false;
+        bool isDesc=false;
+        int n1 = 1;
+        int n2 = 3;
+        string query = "SELECT * FROM contact LIMIT 1,3";
         private void button1_Click(object sender, EventArgs e)
         {
             F1();
@@ -71,13 +75,15 @@ namespace WindowsFormsAppSQL
 
         private void button3_Click(object sender, EventArgs e)
         {
-            query = "SELECT * FROM `contact` ORDER BY `contact`.`date` ASC";
+            string pages = n1.ToString() + "," + n2.ToString();
+            query = "SELECT * FROM `contact` ORDER BY `contact`.`date` ASC LIMIT " + pages;
             F1();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            query = "SELECT * FROM `contact` ORDER BY `contact`.`date` DESC";
+            string pages = n1.ToString() + "," + n2.ToString();
+            query = "SELECT * FROM `contact` ORDER BY `contact`.`date` DESC LIMIT " + pages;
             F1();
         }
 
@@ -85,18 +91,67 @@ namespace WindowsFormsAppSQL
         {
             string word;
             string column;
+            string pages = n1.ToString() + "," + n2.ToString();
             word = textBox1.Text;
             column = comboBox1.Text;
             if (column=="")
             {
                 column = "name";
             }
-            query = "SELECT * FROM `contact` WHERE `"+column +"`  LIKE '%" + word + "%'";
+            query = "SELECT * FROM `contact` WHERE `"+column +"`  LIKE '%" + word + "%' LIMIT " + pages;
             F1();
         }
         private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            mySqlDataAdapter.Update(dataTable);
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+           
+        }
+
+        private void dataGridView1_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            mySqlDataAdapter.Update(dataTable);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+           
+            n1 = n1 + 3;
+            n2 = n2 + 3;
+            string pages = n1.ToString() + "," + n2.ToString();
+            query = "SELECT * FROM contact LIMIT "+pages;
+            F1();
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            n1 = n1 - 3;
+            n2 = n2 - 3;
+            
+            if (n1<1)
+            {
+                n1 = 1;
+            }
+            if (n1==1)
+            {
+                n2 = 3;
+            }
+            string pages = n1.ToString() + "," + n2.ToString();
+            query = "SELECT * FROM contact LIMIT " + pages;
+            F1();
         }
     }
 }
